@@ -1,35 +1,22 @@
+import java.util.*;
 class Solution {
     // Function to return Breadth First Search Traversal of given graph.
     public ArrayList<Integer> bfs(ArrayList<ArrayList<Integer>> adj) {
-        // code here
-        ArrayList<Integer> ans= new ArrayList<>();
-        if(adj.size()==0)return ans;
-        boolean[] vis=new boolean[adj.size()];
-        
-        for(int i=0;i<adj.size();i++){
-            if(!vis[i]){
-                Queue<Integer> q = new LinkedList();
-                q.add(i);
-                bfsUtil(adj,ans,q,vis);
+        // code here connected hence no outer loop
+        ArrayList<Integer> ans=new ArrayList<>();
+        boolean vis[]=new boolean[adj.size()];
+        Queue<Integer> q=new LinkedList<>();
+        q.add(0);
+        while(!q.isEmpty()){
+            int curr=q.remove();
+            if(!vis[curr]){
+                vis[curr]=true;
+                ans.add(curr);
+                for(int neigh:adj.get(curr)){
+                    if(!vis[neigh])q.add(neigh);
+                }
             }
         }
         return ans;
-    }
-    static ArrayList<Integer> bfsUtil(ArrayList<ArrayList<Integer>> graph,ArrayList<Integer> list,Queue<Integer> q,boolean[] vis){
-        while(!q.isEmpty()){
-            int curr=q.poll();
-            if(!vis[curr]){
-                list.add(curr);
-                vis[curr]=true;
-                for(int i=0;i<graph.get(curr).size();i++){
-                    q.add(graph.get(curr).get(i));
-                    
-                }
-            } 
-            
-        }
-        
-       
-        return list;
     }
 }
