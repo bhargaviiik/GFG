@@ -1,34 +1,39 @@
 class Solution {
     public static ArrayList<Integer> topoSort(int V, int[][] edges) {
         // code here
-        boolean[] vis=new boolean[V];
-        Stack<Integer> s = new Stack<>();
+        //now using bfs(kahs algorithm)
         ArrayList<Integer>[] adj=new ArrayList[V];
-        ArrayList<Integer> ans=new ArrayList<>();
         buildAdj(adj,edges);
-        for(int i=0;i<adj.length;i++){
-            if(!vis[i]) topoSortUtil(i,adj,vis,s);
+        int[] indeg=new int[V];
+        buildIndeg(adj,indeg);
+        Queue<Integer> q=new LinkedList<>();
+        ArrayList<Integer> ans=new ArrayList<>();
+        for(int i=0;i<indeg.length;i++){
+            if(indeg[i]==0) q.add(i);
         }
-        while(!s.isEmpty()){
-            ans.add(s.pop());
+        while(!q.isEmpty()){
+            int curr=q.poll();
+            for(int neigh:adj[curr]){
+                if(--indeg[neigh]==0)q.add(neigh);
+            }
+            ans.add(curr);
         }
         return ans;
-        
     }
-    static void buildAdj(ArrayList<Integer>[] adj,int[][]edges){
+    static void buildAdj(ArrayList<Integer>[] adj,int[][] edges){
         for(int i=0;i<adj.length;i++){
             adj[i]=new ArrayList<>();
         }
-        for(int[] edge:edges){
-            int u=edge[0],v=edge[1];
+        for(int j=0;j<edges.length;j++){
+            int u=edges[j][0],v=edges[j][1];
             adj[u].add(v);
         }
     }
-    static void topoSortUtil(int i,ArrayList<Integer>[] adj,boolean[] vis,Stack<Integer> s){
-        vis[i]=true;
-        for(int neigh:adj[i]){
-            if(!vis[neigh]) topoSortUtil(neigh,adj,vis,s);
+    static void buildIndeg(ArrayList<Integer>[] adj,int[] indeg){
+        for(int i=0;i<adj.length;i++){
+            for(int neigh:adj[i]){
+                indeg[neigh]++;
+            }
         }
-        s.add(i);
     }
 }
