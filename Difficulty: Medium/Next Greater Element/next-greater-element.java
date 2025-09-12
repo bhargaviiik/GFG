@@ -1,25 +1,20 @@
 class Solution {
     public ArrayList<Integer> nextLargerElement(int[] arr) {
-        // code here
-        ArrayList<Integer> list= new ArrayList<>();
-        int n=arr.length;
-        
-        for(int i=0;i<n;i++){
-            boolean flag=false; // flag is for every i
-            int j=i+1;
-            while(j<n){
-                if(arr[j]>arr[i]){
-                    list.add(arr[j]);
-                    flag=true;
-                    break;
-                    
-                }
-                j++;
-            }
-            if(!flag){
-                list.add(-1);
-            }
+        Stack<Integer> s= new Stack<>();
+        ArrayList<Integer> ans = new ArrayList<>();
+        for(int i=0;i<arr.length;i++){
+            ans.add(-1);
         }
-        return list;
+        for(int i=arr.length-1;i>=0;i--){
+            int curr=arr[i];
+            while(s.isEmpty()==false && s.peek()<=curr) s.pop();
+            if(s.isEmpty()){
+                s.push(arr[i]);
+                continue;
+            }
+            ans.set(i,s.peek());
+            s.push(arr[i]);
+        }
+        return ans;
     }
 }
